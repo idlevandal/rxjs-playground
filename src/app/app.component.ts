@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { of, throwError, fromEvent, interval } from 'rxjs';
-import { concatMap, delay, mergeMap, switchMap, debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import { of, throwError, fromEvent, interval, forkJoin, from, combineLatest, timer } from 'rxjs';
+import { concatMap, delay, mergeMap, switchMap, debounceTime, distinctUntilChanged, tap, map } from 'rxjs/operators';
 import { FormControl } from '@angular/forms';
 
 @Component({
@@ -24,9 +24,12 @@ export class AppComponent implements OnInit {
     //   )
     
     // swap concatMap & mergeMap
-    of(1, 2, 3).pipe(
-        concatMap(num => of(`the num is ${num}`).pipe(delay(2000)))
-      ).subscribe(console.log);
+    // of(1, 2, 3).pipe(
+    //     tap(console.log),
+    //     concatMap(num => of(`the num is ${num}`).pipe(delay(2000))),
+    //     tap(console.log),
+    //     mergeMap(el => of(`=> ${el}`))
+    //   ).subscribe(console.log);
     
 
     // SWITCHMAP cancel previous inner observable & re-subscribe (search)
@@ -41,5 +44,26 @@ export class AppComponent implements OnInit {
     // )
     // .subscribe(val => this.counter = val);
 
+    // FORKJOIN
+    // returns 3, 6 & 'Dave'
+    forkJoin([
+      of(1, 2, 3).pipe(tap(console.log), map(el => el * 3)),
+      from([4, 5, 6]).pipe(tap(console.log)),
+      of('Dave')
+    ]).subscribe(console.log);
+
+    // COMBINELATEST
+    // returns
+    // combineLatest([
+    //   of(1, 2, 3),
+    //   from([4, 5, 6]),
+    //   of('Dave')
+    // ]).subscribe(console.log);
+
   }
+
+  // FORKJOIN vs COMBINELATEST
+  // forkJoin - When all observables complete, emit the last emitted value from each.
+  // combineLatest - When any observable emits a value, emit the latest value from each.
+  // Usage is pretty similar, but you shouldn't forget to unsubscribe from combineLatest unlike forkJoin.
 }
