@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { of, throwError, fromEvent, interval, forkJoin, from, combineLatest, timer, Observable } from 'rxjs';
-import { concatMap, delay, mergeMap, switchMap, debounceTime, distinctUntilChanged, tap, map } from 'rxjs/operators';
+import { concatMap, delay, mergeMap, switchMap, debounceTime, distinctUntilChanged, tap, map, take, filter } from 'rxjs/operators';
 import { FormControl } from '@angular/forms';
 import { Todo } from './interfaces/todo.interface';
 import { TodoService } from './todo.service';
@@ -21,6 +21,16 @@ export class AppComponent implements OnInit {
   constructor(private todoService: TodoService) {}
 
   public ngOnInit(): void {
+
+    const ev = fromEvent(document, 'click');
+    
+    ev
+      .pipe(
+        tap(console.log),
+        map(({x, y}: MouseEvent) => ({x, y}))
+      )
+      .subscribe(console.log);
+
     // MAP **note: you need the extra internal map because the obs is an array, not needed if obs is obj
     // this.todoService.getTodos().pipe(
     //   map((res: Todo[]) =>
@@ -33,11 +43,11 @@ export class AppComponent implements OnInit {
     //   )
     // ).subscribe(console.log);
     // v2 with destructuring
-    this.todoService.getTodos().pipe(
-      map((res: Todo[]) =>
-        res.map(({id, title}: Todo) => ({id, title}))
-      )
-    ).subscribe(console.log);
+    // this.todoService.getTodos().pipe(
+    //   map((res: Todo[]) =>
+    //     res.map(({id, title}: Todo) => ({id, title}))
+    //   )
+    // ).subscribe(console.log);
 
     // MERGEMAP / CONCATMAP (main diff - concatmap sequence of execution is guaranteed)
     // mergemap executes in parallel (async) (merge 2 obs into 1)
