@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { of, throwError, fromEvent, interval, forkJoin, from, combineLatest, timer, Observable } from 'rxjs';
-import { concatMap, delay, mergeMap, switchMap, debounceTime, distinctUntilChanged, tap, map, take, filter } from 'rxjs/operators';
+import { concatMap, delay, mergeMap, switchMap, debounceTime, distinctUntilChanged, tap, map, take, filter, takeUntil } from 'rxjs/operators';
 import { FormControl } from '@angular/forms';
 import { Todo } from './interfaces/todo.interface';
 import { TodoService } from './todo.service';
+import { NewsFeedService } from './news-feed.service';
 
 @Component({
   selector: 'app-root',
@@ -15,21 +16,26 @@ export class AppComponent implements OnInit {
   public counter: number = 0;
   public searchControl: FormControl = new FormControl();
 
-  public obs1$ = of('Dave').pipe(delay(4000));
+  public obs1$ = of('Dave').pipe(delay(4000)); 
   // public obs1$ = throwError('This is an error!');
 
-  constructor(private todoService: TodoService) {}
+  constructor(private newsFeedService: NewsFeedService ,private todoService: TodoService) {}
 
   public ngOnInit(): void {
-
-    const ev = fromEvent(document, 'click');
-    
-    ev
-      .pipe(
-        tap(console.log),
-        map(({x, y}: MouseEvent) => ({x, y}))
-      )
+    // this.newsFeedService.news$.subscribe(console.log);
+    // this.newsFeedService.getStory(24387821).subscribe(console.log);
+    this.newsFeedService.joinWithVariableRequests$([24388803, 24389064, 24389036, 24389143, 24389058, 24389275, 24387821, 24386584, 24388753, 24386826])
       .subscribe(console.log);
+
+
+    // FROM EVENT
+    // const ev = fromEvent(document, 'click');
+    
+    // ev.pipe(
+    //   tap(console.log),
+    //   map(({x, y}: MouseEvent) => ({x, y}))
+    // )
+    // .subscribe(console.log);
 
     // MAP **note: you need the extra internal map because the obs is an array, not needed if obs is obj
     // this.todoService.getTodos().pipe(
@@ -62,7 +68,6 @@ export class AppComponent implements OnInit {
     //     tap(console.log),
     //     mergeMap(el => of(`=> ${el}`))
     //   ).subscribe(console.log);
-    
 
     // SWITCHMAP cancel previous inner observable & re-subscribe (search)
     // fromEvent(document, 'click')
