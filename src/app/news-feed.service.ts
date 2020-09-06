@@ -15,12 +15,7 @@ export class NewsFeedService {
   news$: Observable<any> = this.http.get(`${this._URL}topstories.json`).pipe(
     tap(console.log),
     map(res => res.slice(0, 10)),
-    // tap(el => from(el)),
-    // switchMap(res =>  
-    //   res.map(el => {
-    //     return this.http.get(`${this._URL}item/${el}.json`)
-    //   })
-    // ),
+    mergeMap(el => this.joinWithVariableRequests$(el)),
     catchError(err => {
       console.log('error loading feed');
       console.log(err);

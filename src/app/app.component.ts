@@ -22,10 +22,10 @@ export class AppComponent implements OnInit {
   constructor(private newsFeedService: NewsFeedService ,private todoService: TodoService) {}
 
   public ngOnInit(): void {
-    // this.newsFeedService.news$.subscribe(console.log);
+    this.newsFeedService.news$.subscribe(console.log);
     // this.newsFeedService.getStory(24387821).subscribe(console.log);
-    this.newsFeedService.joinWithVariableRequests$([24388803, 24389064, 24389036, 24389143, 24389058, 24389275, 24387821, 24386584, 24388753, 24386826])
-      .subscribe(console.log);
+    // this.newsFeedService.joinWithVariableRequests$([24388803, 24389064, 24389036, 24389143, 24389058, 24389275, 24387821, 24386584, 24388753, 24386826])
+    //   .subscribe(console.log);
 
 
     // FROM EVENT
@@ -82,6 +82,7 @@ export class AppComponent implements OnInit {
     // .subscribe(val => this.counter = val);
 
     // FORKJOIN
+    // Best practices: https://medium.com/better-programming/rxjs-forkjoin-never-use-array-indexes-in-subscribe-1f4005582ae8
     // returns 3, 6 & 'Dave'
     // forkJoin([ 
     //   of(1, 2, 3).pipe(tap(console.log), map(el => el * 3)),
