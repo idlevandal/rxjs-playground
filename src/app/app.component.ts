@@ -15,6 +15,7 @@ export class AppComponent implements OnInit {
 
   public counter: number = 0;
   public searchControl: FormControl = new FormControl();
+  public newsArr: any;
 
   public obs1$ = of('Dave').pipe(delay(4000)); 
   // public obs1$ = throwError('This is an error!');
@@ -22,7 +23,10 @@ export class AppComponent implements OnInit {
   constructor(private newsFeedService: NewsFeedService ,private todoService: TodoService) {}
 
   public ngOnInit(): void {
-    this.newsFeedService.news$.subscribe(console.log);
+    this.newsFeedService.news$.subscribe(el => {
+      console.log(el);
+      this.newsArr = el;
+    });
     // this.newsFeedService.getStory(24387821).subscribe(console.log);
     // this.newsFeedService.joinWithVariableRequests$([24388803, 24389064, 24389036, 24389143, 24389058, 24389275, 24387821, 24386584, 24388753, 24386826])
     //   .subscribe(console.log);

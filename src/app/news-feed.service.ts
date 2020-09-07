@@ -12,10 +12,11 @@ export class NewsFeedService {
 
   constructor(private http: HttpClient) { }
 
-  news$: Observable<any> = this.http.get(`${this._URL}topstories.json`).pipe(
+  // limitToFirst REQUIRES the orderBy
+  news$: Observable<any> = this.http.get(`${this._URL}newstories.json?orderBy="$key"&limitToFirst=30`).pipe(
     tap(console.log),
     map(res => res.slice(0, 10)),
-    mergeMap(el => this.joinWithVariableRequests$(el)),
+    mergeMap(ids => forkJoin(ids.map(id => this.http.get(`${this._URL}item/${id}.json`)))),
     catchError(err => {
       console.log('error loading feed');
       console.log(err);
