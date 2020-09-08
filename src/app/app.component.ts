@@ -31,6 +31,12 @@ export class AppComponent implements OnInit {
     // this.newsFeedService.joinWithVariableRequests$([24388803, 24389064, 24389036, 24389143, 24389058, 24389275, 24387821, 24386584, 24388753, 24386826])
     //   .subscribe(console.log);
 
+    // const obs = of(undefined);
+    // obs.pipe(
+    //   take(1),
+    //   switchMap(() => interval(1000).pipe(take(3))),
+    //   // take(1),
+    // ).subscribe(console.log);
 
     // FROM EVENT
     // const ev = fromEvent(document, 'click');
