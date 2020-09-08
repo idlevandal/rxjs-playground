@@ -23,10 +23,11 @@ export class AppComponent implements OnInit {
   constructor(private newsFeedService: NewsFeedService ,private todoService: TodoService) {}
 
   public ngOnInit(): void {
-    this.newsFeedService.news$.subscribe(el => {
-      console.log(el);
-      this.newsArr = el;
-    });
+
+    // this.newsFeedService.news$.subscribe(el => {
+    //   console.log(el);
+    //   this.newsArr = el;
+    // });
     // this.newsFeedService.getStory(24387821).subscribe(console.log);
     // this.newsFeedService.joinWithVariableRequests$([24388803, 24389064, 24389036, 24389143, 24389058, 24389275, 24387821, 24386584, 24388753, 24386826])
     //   .subscribe(console.log);
@@ -93,20 +94,19 @@ export class AppComponent implements OnInit {
 
     // FORKJOIN
     // Best practices: https://medium.com/better-programming/rxjs-forkjoin-never-use-array-indexes-in-subscribe-1f4005582ae8
-    // returns 3, 6 & 'Dave'
     // forkJoin([ 
     //   of(1, 2, 3).pipe(tap(console.log), map(el => el * 3)),
     //   from([4, 5, 6]).pipe(delay(3000)),
-    //   of('fork join')
+    //   of('fork', 'join', 'test')
     // ]).subscribe(console.log);
 
-    // COMBINELATEST
-    // returns
-    // combineLatest([
-    //   of(1, 2, 3),
-    //   from([4, 5, 6]).pipe(delay(1)),
-    //   of('combine latest')
-    // ]).subscribe(console.log);
+    // COMBINELATEST ** move pipe(delay) to different observables to see different results
+    // swap forkJoin to see the difference!!
+    combineLatest([
+      of(1, 2, 3).pipe(delay(1000)),
+      from([4, 5, 6]),
+      of('combine', 'latest', 'test').pipe(delay(1002))
+    ]).subscribe(console.log);
 
   }
 
