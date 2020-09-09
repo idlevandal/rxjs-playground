@@ -5,6 +5,7 @@ import { FormControl } from '@angular/forms';
 import { Todo } from './interfaces/todo.interface';
 import { TodoService } from './todo.service';
 import { NewsFeedService } from './news-feed.service';
+import { PostService } from './post.service';
 
 @Component({
   selector: 'app-root',
@@ -20,9 +21,18 @@ export class AppComponent implements OnInit {
   public obs1$ = of('Dave').pipe(delay(4000)); 
   // public obs1$ = throwError('This is an error!');
 
-  constructor(private newsFeedService: NewsFeedService ,private todoService: TodoService) {}
+  constructor(private newsFeedService: NewsFeedService,
+      private todoService: TodoService,
+      private postService: PostService
+  ) {}
 
   public ngOnInit(): void {
+
+    const x = this.postService.$postsWithAuthor;
+
+    x.subscribe(el => {
+      console.log(el);
+    })
 
     // this.newsFeedService.news$.subscribe(el => {
     //   console.log(el);
@@ -102,11 +112,11 @@ export class AppComponent implements OnInit {
 
     // COMBINELATEST ** move pipe(delay) to different observables to see different results
     // swap forkJoin to see the difference!!
-    combineLatest([
-      of(1, 2, 3).pipe(delay(1000)),
-      from([4, 5, 6]),
-      of('combine', 'latest', 'test').pipe(delay(1002))
-    ]).subscribe(console.log);
+    // combineLatest([
+    //   of(1, 2, 3).pipe(delay(1000)),
+    //   from([4, 5, 6]),
+    //   of('combine', 'latest', 'test').pipe(delay(1002))
+    // ]).subscribe(console.log);
 
   }
 
