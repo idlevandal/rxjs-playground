@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { of, throwError, fromEvent, interval, forkJoin, from, combineLatest, timer, Observable } from 'rxjs';
-import { concatMap, delay, mergeMap, switchMap, debounceTime, distinctUntilChanged, tap, map, take, filter, takeUntil } from 'rxjs/operators';
+import { concatMap, delay, mergeMap, switchMap, debounceTime, distinctUntilChanged, tap, map, take, filter, takeUntil, distinctUntilKeyChanged } from 'rxjs/operators';
 import { FormControl } from '@angular/forms';
 import { Todo } from './interfaces/todo.interface';
 import { TodoService } from './todo.service';
@@ -28,7 +28,7 @@ export class AppComponent implements OnInit {
 
   public ngOnInit(): void {
 
-    this.postService.$postsWithAuthor.subscribe(console.log);
+    // this.postService.$postsWithAuthor.subscribe(console.log);
 
     // this.newsFeedService.news$.subscribe(el => {
     //   console.log(el);
@@ -97,6 +97,15 @@ export class AppComponent implements OnInit {
     //   switchMap(() => interval(500))
     // )
     // .subscribe(val => this.counter = val);
+
+    // DISTINCT UNTIL CHANGED // DISTINCT UNTIL KEY CHANGED
+    // from([1, 1, 1, 2, 1, 2, 3, 3, 3]).pipe(distinctUntilChanged()).subscribe(console.log);
+    // from([
+    //   { id: '1', firstname: 'Tom', lastname: 'Johnson' }, 
+    //   { id: '1', firstname: 'Tom', lastname: 'Johnson' },
+    //   { id: '2', firstname: 'Martin', lastname: 'Johnson' },
+    //   { id: '1', firstname: 'Tom', lastname: 'Johnson' },
+    // ]).pipe(distinctUntilKeyChanged('id')).subscribe(console.log);
 
     // FORKJOIN
     // Best practices: https://medium.com/better-programming/rxjs-forkjoin-never-use-array-indexes-in-subscribe-1f4005582ae8
