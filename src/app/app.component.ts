@@ -28,11 +28,7 @@ export class AppComponent implements OnInit {
 
   public ngOnInit(): void {
 
-    const x = this.postService.$postsWithAuthor;
-
-    x.subscribe(el => {
-      console.log(el);
-    })
+    this.postService.$postsWithAuthor.subscribe(console.log);
 
     // this.newsFeedService.news$.subscribe(el => {
     //   console.log(el);
