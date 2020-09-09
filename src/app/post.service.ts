@@ -14,12 +14,13 @@ export class PostService {
   constructor(private http: HttpClient) { }
 
 
+  // fetch list posts & users, map through posts to find the the user with the userId from that post, add users name to each post object.
   $postsWithAuthor = combineLatest([
     this.http.get<Array<Post>>(`${this._URL}/posts`),
     this.http.get<Array<any>>(`${this._URL}/users`)
   ]).pipe(
     map(([posts, users]) => {
-      // map (rxjs) through posts, return the post (...p) & add the userName to the returned post
+      // map through posts, return the post (...p) & add the userName to the returned post
       // do this by mapping (array) through the users and find the matching id and add the name to userName
       return posts.map(
         p => ({...p, userName: users.find(u => u.id === p.userId).name} as Post)
