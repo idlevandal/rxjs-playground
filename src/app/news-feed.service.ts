@@ -13,16 +13,16 @@ export class NewsFeedService {
   constructor(private http: HttpClient) { }
 
   // limitToFirst REQUIRES the orderBy
-  news$: Observable<any> = this.http.get(`${this._URL}newstories.json?orderBy="$key"&limitToFirst=30`).pipe(
-    tap(console.log),
-    map(res => res.slice(0, 10)),
+  news$: Observable<any> = this.http.get<Array<any>>(`${this._URL}newstories.json?orderBy="$key"&limitToFirst=30`).pipe(
+    // tap(console.log),
+    // map(res => res.slice(0, 10)),
     mergeMap(ids => forkJoin(ids.map(id => this.http.get(`${this._URL}item/${id}.json`)))),
-    catchError(err => {
-      console.log('error loading feed');
-      console.log(err);
-      return of(null);
-    }),
-    shareReplay()
+    // catchError(err => {
+    //   console.log('error loading feed');
+    //   console.log(err);
+    //   return of(null);
+    // }),
+    // shareReplay()
   )
 
   getStory(id: any) {

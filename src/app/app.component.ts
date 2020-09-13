@@ -6,6 +6,7 @@ import { Todo } from './interfaces/todo.interface';
 import { TodoService } from './todo.service';
 import { NewsFeedService } from './news-feed.service';
 import { PostService } from './post.service';
+import { BehaveSubService } from './behave-sub.service';
 
 @Component({
   selector: 'app-root',
@@ -17,16 +18,19 @@ export class AppComponent implements OnInit {
   public counter: number = 0;
   public searchControl: FormControl = new FormControl();
   public newsArr: any;
+  private boolVal: boolean = true;
 
   public obs1$ = of('Dave').pipe(delay(4000)); 
   // public obs1$ = throwError('This is an error!');
 
-  constructor(private newsFeedService: NewsFeedService,
+  constructor(private behaveSubService: BehaveSubService,
+      private newsFeedService: NewsFeedService,
       private todoService: TodoService,
       private postService: PostService
   ) {}
 
   public ngOnInit(): void {
+    this.behaveSubService.getValue().subscribe(console.log);
 
     // this.postService.$postsWithAuthor.subscribe(console.log);
 
@@ -123,10 +127,14 @@ export class AppComponent implements OnInit {
     //   of('combine', 'latest', 'test').pipe(delay(1002))
     // ]).subscribe(console.log);
 
-  }
+    // FORKJOIN vs COMBINELATEST
+    // forkJoin - When all observables complete, emit the last emitted value from each.
+    // combineLatest - When any observable emits a value, emit the latest value from each.
+    // Usage is pretty similar, but you shouldn't forget to unsubscribe from combineLatest unlike forkJoin.
+    }
 
-  // FORKJOIN vs COMBINELATEST
-  // forkJoin - When all observables complete, emit the last emitted value from each.
-  // combineLatest - When any observable emits a value, emit the latest value from each.
-  // Usage is pretty similar, but you shouldn't forget to unsubscribe from combineLatest unlike forkJoin.
+    setBehaveSubjectValue(): void {
+      this.behaveSubService.setValue(this.boolVal);
+      this.boolVal = !this.boolVal;
+    }
 }
