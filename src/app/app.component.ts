@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { of, throwError, fromEvent, interval, forkJoin, from, combineLatest, timer, Observable } from 'rxjs';
-import { concatMap, delay, mergeMap, switchMap, debounceTime, distinctUntilChanged, tap, map, take, filter, takeUntil, distinctUntilKeyChanged } from 'rxjs/operators';
+import { concatMap, delay, mergeMap, switchMap, debounceTime, distinctUntilChanged, tap, map, take, filter, takeUntil, distinctUntilKeyChanged, pluck, mapTo } from 'rxjs/operators';
 import { FormControl } from '@angular/forms';
 import { Todo } from './interfaces/todo.interface';
 import { TodoService } from './todo.service';
@@ -30,7 +30,7 @@ export class AppComponent implements OnInit {
   ) {}
 
   public ngOnInit(): void {
-    this.behaveSubService.getValue().subscribe(console.log);
+    // this.behaveSubService.getValue().subscribe(console.log);
 
     // this.postService.$postsWithAuthor.subscribe(console.log);
 
@@ -131,6 +131,14 @@ export class AppComponent implements OnInit {
     // forkJoin - When all observables complete, emit the last emitted value from each.
     // combineLatest - When any observable emits a value, emit the latest value from each.
     // Usage is pretty similar, but you shouldn't forget to unsubscribe from combineLatest unlike forkJoin.
+
+    // PLUCK - mapTo
+      const keyup$ = fromEvent(document, 'keyup')
+        .pipe(pluck('code')).subscribe(console.log);
+      const click$ = fromEvent(document, 'click')
+        .pipe(pluck('target', 'nodeName')).subscribe(console.log)
+      const mapTo$ = fromEvent(document, 'click')
+        .pipe(mapTo('You clicked the doc...')).subscribe(alert);
     }
 
     setBehaveSubjectValue(): void {
