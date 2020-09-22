@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
-import { of, throwError, fromEvent, interval, forkJoin, from, combineLatest, timer, Observable } from 'rxjs';
-import { concatMap, delay, mergeMap, switchMap, debounceTime, distinctUntilChanged, tap, map, take, filter, takeUntil, distinctUntilKeyChanged, pluck, mapTo } from 'rxjs/operators';
+import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { of, throwError, fromEvent, interval, forkJoin, from, combineLatest, timer, Observable, merge } from 'rxjs';
+import { concatMap, delay, mergeMap, switchMap, debounceTime, distinctUntilChanged, tap, map, take, filter, takeUntil, distinctUntilKeyChanged, pluck, mapTo, startWith } from 'rxjs/operators';
 import { FormControl } from '@angular/forms';
 import { Todo } from './interfaces/todo.interface';
 import { TodoService } from './todo.service';
@@ -13,7 +13,7 @@ import { BehaveSubService } from './behave-sub.service';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit, AfterViewInit {
 
   public counter: number = 0;
   public searchControl: FormControl = new FormControl();
@@ -22,6 +22,10 @@ export class AppComponent implements OnInit {
 
   public obs1$ = of('Dave').pipe(delay(4000)); 
   // public obs1$ = throwError('This is an error!');
+
+  @ViewChild('btn') buttonRef: ElementRef<HTMLButtonElement>;
+  query = '';
+  isSearchInputVisible$: Observable<boolean> = of(false);
 
   constructor(private behaveSubService: BehaveSubService,
       private newsFeedService: NewsFeedService,
@@ -133,12 +137,19 @@ export class AppComponent implements OnInit {
     // Usage is pretty similar, but you shouldn't forget to unsubscribe from combineLatest unlike forkJoin.
 
     // PLUCK - mapTo
-      const keyup$ = fromEvent(document, 'keyup')
-        .pipe(pluck('code')).subscribe(console.log);
-      const click$ = fromEvent(document, 'click')
-        .pipe(pluck('target', 'nodeName')).subscribe(console.log)
-      const mapTo$ = fromEvent(document, 'click')
-        .pipe(mapTo('You clicked the doc...')).subscribe(alert);
+    // const keyup$ = fromEvent(document, 'keyup')
+    //   .pipe(pluck('code')).subscribe(console.log);
+    // const click$ = fromEvent(document, 'click')
+    //   .pipe(pluck('target', 'nodeName')).subscribe(console.log)
+    // const mapTo$ = fromEvent(document, 'click')
+    //   .pipe(mapTo('You clicked the doc...')).subscribe(alert);
+    }
+
+    public ngAfterViewInit(): void {
+      this.isSearchInputVisible$ = merge(
+        fromEvent(this.buttonRef.nativeElement, 'click').pipe(tap(e => e.stopPropagation()), mapTo(true)),
+        fromEvent(document.body, 'click').pipe(filter(() => this.query === ''), mapTo(false))
+      ).pipe(startWith(false));
     }
 
     setBehaveSubjectValue(): void {
