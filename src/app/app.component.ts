@@ -80,8 +80,11 @@ export class AppComponent implements OnInit, AfterViewInit {
     //   )
     // ).subscribe(console.log);
 
-    // MERGEMAP / CONCATMAP (main diff - concatmap sequence of execution is guaranteed)
+    // MERGEMAP / CONCATMAP (main diff - concatmap sequence/series of execution is guaranteed)
     // mergemap executes in parallel (async) (merge 2 obs into 1)
+    // 💡 flatMap is an alias for mergeMap!
+    // 💡 If only one inner subscription should be active at a time, try switchMap!
+    // 💡 If the order of emission and subscription of inner observables is important, try concatMap!
     // this.obs1$.pipe(mergeMap(val => of(`${val} Allen`)))
     //   .subscribe(el => console.log(el)
     //   )
