@@ -12,7 +12,7 @@ export class NewsFeedService {
 
   constructor(private http: HttpClient) { }
 
-  // limitToFirst REQUIRES the orderBy
+  // Firebase limitToFirst REQUIRES the orderBy
   news$: Observable<any> = this.http.get<Array<any>>(`${this._URL}newstories.json?orderBy="$key"&limitToFirst=30`).pipe(
     // tap(console.log),
     // map(res => res.slice(0, 10)),

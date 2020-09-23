@@ -7,6 +7,7 @@ import { TodoService } from './todo.service';
 import { NewsFeedService } from './news-feed.service';
 import { PostService } from './post.service';
 import { BehaveSubService } from './behave-sub.service';
+import {ajax} from 'rxjs/ajax';
 
 @Component({
   selector: 'app-root',
@@ -83,12 +84,12 @@ export class AppComponent implements OnInit, AfterViewInit {
     // MERGEMAP / CONCATMAP (main diff - concatmap sequence/series of execution is guaranteed)
     // mergemap executes in parallel (async) (merge 2 obs into 1)
     // 💡 flatMap is an alias for mergeMap!
-    // 💡 If only one inner subscription should be active at a time, try switchMap!
+    // 💡 If only one inner subscription should be active at a time, try switchMap! (GET requests 👍)
     // 💡 If the order of emission and subscription of inner observables is important, try concatMap!
     // this.obs1$.pipe(mergeMap(val => of(`${val} Allen`)))
     //   .subscribe(el => console.log(el)
     //   )
-    
+
     // swap concatMap & mergeMap
     // of(1, 2, 3).pipe(
     //     tap(console.log),
