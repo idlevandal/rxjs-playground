@@ -1,6 +1,6 @@
 import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { of, throwError, fromEvent, interval, forkJoin, from, combineLatest, timer, Observable, merge } from 'rxjs';
-import { concatMap, delay, mergeMap, switchMap, debounceTime, distinctUntilChanged, tap, map, take, filter, takeUntil, distinctUntilKeyChanged, pluck, mapTo, startWith } from 'rxjs/operators';
+import { concatMap, delay, mergeMap, switchMap, debounceTime, distinctUntilChanged, tap, map, take, filter, takeUntil, distinctUntilKeyChanged, pluck, mapTo, startWith, withLatestFrom } from 'rxjs/operators';
 import { FormControl } from '@angular/forms';
 import { Todo } from './interfaces/todo.interface';
 import { TodoService } from './todo.service';
@@ -139,6 +139,13 @@ export class AppComponent implements OnInit, AfterViewInit {
     // forkJoin - When all observables complete, emit the last emitted value from each.
     // combineLatest - When any observable emits a value, emit the latest value from each.
     // Usage is pretty similar, but you shouldn't forget to unsubscribe from combineLatest unlike forkJoin.
+
+    // WITH LATEST FROM
+    const clicks = fromEvent(document, 'click').pipe(mapTo('Mouse clicked at'));
+    const timer = interval(1000).pipe(map((val) => `${val} seconds`));
+    const result = clicks.pipe(withLatestFrom(timer));
+    result.subscribe(([clicks, timer]) => console.log(clicks, timer));
+
 
     // PLUCK - mapTo
     // const keyup$ = fromEvent(document, 'keyup')
